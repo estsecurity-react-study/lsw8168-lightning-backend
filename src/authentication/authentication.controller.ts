@@ -12,6 +12,8 @@ import {
   Get,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { Roles } from 'src/roles.decorator';
+import { UserRoles } from 'src/users/enums/user.enum';
 import { UsersService } from 'src/users/users.service';
 import { AuthenticationService } from './authentication.service';
 import { CookieAuthenticationGuard } from './cookieAuthentication.guard';
@@ -37,6 +39,7 @@ export class AuthenticationController {
   @UseGuards(LocalGuard)
   @Post('login')
   async logIn(@Req() request: Request) {
+    console.log('login', request.user);
     return request.user;
   }
 
@@ -45,6 +48,22 @@ export class AuthenticationController {
   @Get()
   async authenticate(@Req() request: Request) {
     return request.user;
+  }
+
+  @HttpCode(200)
+  @UseGuards(CookieAuthenticationGuard)
+  @Roles(UserRoles.DEFALUT)
+  @Get('test')
+  async test() {
+    return 'DEFALUT';
+  }
+
+  @HttpCode(200)
+  @UseGuards(CookieAuthenticationGuard)
+  @Roles(UserRoles.ADMIN)
+  @Get('role')
+  async role() {
+    return 'ADMIN';
   }
 
   @HttpCode(200)

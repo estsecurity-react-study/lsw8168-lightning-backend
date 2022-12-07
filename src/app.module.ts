@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { RolesGuard } from './authentication/roles.guard';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
 
 @Module({
@@ -19,6 +21,11 @@ import { typeOrmAsyncConfig } from './config/typeorm.config';
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

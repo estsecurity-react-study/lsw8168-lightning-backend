@@ -8,22 +8,25 @@ import { DataSource } from 'typeorm';
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
   inject: [ConfigService],
-  useFactory: async (): Promise<TypeOrmModuleOptions> => {
+  useFactory: async (
+    configService: ConfigService,
+  ): Promise<TypeOrmModuleOptions> => {
     return {
       type: 'mysql',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10),
-      username: process.env.DB_USERNAME,
-      database: process.env.DB_NAME,
-      password: process.env.DB_PASSWORD,
+      host: configService.get('DB_HOST'),
+      port: configService.get('DB_PORT'),
+      username: configService.get('DB_USERNAME'),
+      database: configService.get('DB_NAME'),
+      password: configService.get('DB_PASSWORD'),
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
       migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
       migrationsTableName: 'migrations',
       extra: {
         charset: 'utf8mb4_unicode_ci',
       },
+      autoLoadEntities: true,
       synchronize: true,
-      logging: false,
+      logging: true,
     };
   },
   dataSourceFactory: async (options) => {
@@ -32,7 +35,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   },
 };
 
-export const typeOrmConfig: TypeOrmModuleOptions = {
+export const typeOrmConfig = {
   type: 'mysql',
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT, 10),
@@ -41,10 +44,13 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   password: process.env.DB_PASSWORD,
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
-  migrationsTableName: 'migrations',
+  cli: {
+    migrationsDir: __dirname + '/../database/migrations',
+  },
+  autoLoadEntities: true,
   extra: {
     charset: 'utf8mb4_unicode_ci',
   },
-  synchronize: true,
-  logging: false,
+  synchronize: false,
+  logging: true,
 };
