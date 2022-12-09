@@ -11,9 +11,15 @@ export class UsersService {
   ) {}
 
   async create(userData: CreateUserDto) {
-    const newUser = await this.usersRepository.create(userData);
+    const newUser = this.usersRepository.create(userData);
     await this.usersRepository.save(newUser);
     return newUser;
+  }
+
+  async emailCheck(email: string) {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    if (user) true;
+    return false;
   }
 
   async getByEmail(email: string) {
@@ -22,7 +28,7 @@ export class UsersService {
       return user;
     }
     throw new HttpException(
-      'User with this email does not exist',
+      '이메일이 존재하지 않습니다.',
       HttpStatus.NOT_FOUND,
     );
   }

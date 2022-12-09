@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { UserRoles } from '../enums/user.enum';
 
@@ -7,22 +14,31 @@ export class User {
   @PrimaryGeneratedColumn()
   public id?: number;
 
-  @Column({ unique: true })
-  public email: string;
+  @Column({ unique: true, nullable: true })
+  email: string | null;
+
+  @Column({ nullable: true })
+  name: string | null;
 
   @Column()
-  public name: string;
-
-  @Column()
-  @Exclude()
-  public password: string;
+  @Exclude({ toPlainOnly: true })
+  password: string;
 
   @Column({
     type: 'enum',
     enum: UserRoles,
     default: UserRoles.DEFALUT,
   })
-  public role: UserRoles;
+  role?: UserRoles | null;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
 
 export default User;

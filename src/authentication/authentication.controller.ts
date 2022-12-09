@@ -11,6 +11,7 @@ import {
   ConflictException,
   Get,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { Roles } from 'src/roles.decorator';
 import { UserRoles } from 'src/users/enums/user.enum';
@@ -20,6 +21,11 @@ import { CookieAuthenticationGuard } from './cookieAuthentication.guard';
 import RegisterDto from './dto/register.dto';
 import { LocalGuard } from './local.guard';
 
+@ApiTags('Auth')
+@Controller({
+  path: 'auth',
+  version: '1',
+})
 @Controller('authentication')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthenticationController {
@@ -30,7 +36,7 @@ export class AuthenticationController {
 
   @Post('register')
   async register(@Body() registrationData: RegisterDto) {
-    const exists = await this.usersService.getByEmail(registrationData.email);
+    const exists = await this.usersService.emailCheck(registrationData.email);
     if (exists) throw new ConflictException('사용자가 이미 있습니다.');
     return this.authenticationService.register(registrationData);
   }
