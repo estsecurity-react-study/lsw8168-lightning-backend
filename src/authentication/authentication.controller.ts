@@ -72,9 +72,9 @@ export class AuthenticationController {
   @UseGuards(CookieAuthenticationGuard)
   @Post('logout')
   async logOut(@Req() request: Request, @Res() res: Response) {
-    request.logOut(() => {
+    request.session.destroy(function () {
+      res.cookie('connect.sid', '', { maxAge: 0 });
       res.redirect('/');
     });
-    request.session.cookie.maxAge = 0;
   }
 }
