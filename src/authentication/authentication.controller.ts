@@ -22,10 +22,6 @@ import RegisterDto from './dto/register.dto';
 import { LocalGuard } from './local.guard';
 
 @ApiTags('Auth')
-@Controller({
-  path: 'auth',
-  version: '1',
-})
 @Controller('authentication')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthenticationController {
