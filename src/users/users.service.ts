@@ -18,8 +18,7 @@ export class UsersService {
 
   async emailCheck(email: string) {
     const user = await this.usersRepository.findOne({ where: { email } });
-    if (user) true;
-    return false;
+    return user !== null;
   }
 
   async getByEmail(email: string) {

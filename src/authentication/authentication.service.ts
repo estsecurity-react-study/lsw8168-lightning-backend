@@ -41,7 +41,7 @@ export class AuthenticationService {
     const isPasswordMatching = await compare(plainTextPassword, hashedPassword);
     if (!isPasswordMatching) {
       throw new HttpException(
-        'Wrong credentials provided',
+        '비밀번호가 일치하지 않습니다.',
         HttpStatus.BAD_REQUEST,
       );
     }

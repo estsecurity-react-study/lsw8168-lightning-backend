@@ -12,7 +12,7 @@ import { UserRoles } from '../enums/user.enum';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  public id?: number;
+  id?: number;
 
   @Column({ unique: true, nullable: true })
   email: string | null;
@@ -39,6 +39,13 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @Exclude()
+  @Column({ nullable: true })
+  twoFactorAuthenticationSecret?: string;
+
+  @Column({ default: false })
+  isTwoFactorAuthenticationEnabled: boolean;
 }
 
 export default User;

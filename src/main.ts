@@ -30,7 +30,7 @@ async function bootstrap() {
       cookie: {
         httpOnly: true,
         secure: configService.get('app.nodeEnv') !== 'development',
-        maxAge: configService.get('app.expires'),
+        maxAge: configService.get('auth.expires'),
       },
       store: new TypeormStore().connect(sessionRepository),
     }),

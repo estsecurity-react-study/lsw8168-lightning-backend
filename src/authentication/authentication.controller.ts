@@ -33,7 +33,7 @@ export class AuthenticationController {
   @Post('register')
   async register(@Body() registrationData: RegisterDto) {
     const exists = await this.usersService.emailCheck(registrationData.email);
-    if (exists) throw new ConflictException('사용자가 이미 있습니다.');
+    if (exists) throw new ConflictException('Email이 이미 있습니다.');
     return this.authenticationService.register(registrationData);
   }
 
@@ -68,11 +68,16 @@ export class AuthenticationController {
     return 'ADMIN';
   }
 
+  @Post('check')
+  async check() {
+    return 'ok';
+  }
+
   @HttpCode(200)
   @UseGuards(CookieAuthenticationGuard)
   @Post('logout')
-  async logOut(@Req() request: Request, @Res() res: Response) {
-    request.session.destroy(function () {
+  async logOut(@Req() req: Request, @Res() res: Response) {
+    req.session.destroy(function () {
       res.cookie('connect.sid', '', { maxAge: 0 });
       res.redirect('/');
     });
