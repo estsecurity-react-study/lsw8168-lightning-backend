@@ -19,14 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -f ./src/config/typeorm.config-migrations.ts",
-    "migration:generate": "npm run typeorm:cli -- migration:generate -d src/database/migrations -n",
-    "migration:create": "npm run typeorm:cli -- migration:create -d src/database/migrations -n",
-    "migration:run": "npm run typeorm:cli -- migration:run",
-    "migration:revert": "npm run typeorm:cli -- migration:revert",
-    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n src/config/typeorm.config-migrations.ts",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n src/config/typeorm.config-migrations.ts",
-    "db:refresh": "npm run typeorm:cli schema:drop && npm run migration:run && npm run seed:run"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d ormconfig.ts"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -44,6 +37,7 @@
     "class-validator": "^0.13.2",
     "connect-typeorm": "^2.0.0",
     "express-session": "^1.17.3",
+    "joi": "^17.7.0",
     "mysql2": "^2.3.3",
     "nest-winston": "^1.8.0",
     "otplib": "^12.0.1",

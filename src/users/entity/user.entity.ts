@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
 import { UserRoles } from '../enums/user.enum';
 
 @Entity()
@@ -14,12 +14,15 @@ export class User {
   @PrimaryGeneratedColumn()
   id?: number;
 
+  @Transform((params) => params.value.trim())
   @Column({ unique: true, nullable: true })
   email: string | null;
 
+  @Transform((params) => params.value.trim())
   @Column({ nullable: true })
   name: string | null;
 
+  @Transform((params) => params.value.trim())
   @Column()
   @Exclude({ toPlainOnly: true })
   password: string;

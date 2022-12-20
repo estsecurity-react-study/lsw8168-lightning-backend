@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import EditDto from 'src/authentication/dto/edit.dto';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUser.dto';
 import { User } from './entity/user.entity';
@@ -14,6 +15,16 @@ export class UsersService {
     const newUser = this.usersRepository.create(userData);
     await this.usersRepository.save(newUser);
     return newUser;
+  }
+
+  async update(userData: CreateUserDto) {
+    const { email, password } = userData;
+    return await this.usersRepository.update(
+      { email },
+      {
+        password: password,
+      },
+    );
   }
 
   async emailCheck(email: string) {
@@ -40,6 +51,16 @@ export class UsersService {
     throw new HttpException(
       'User with this id does not exist',
       HttpStatus.NOT_FOUND,
+    );
+  }
+
+  async edit(editData: EditDto) {
+    const { email, username } = editData;
+    return await this.usersRepository.update(
+      { email },
+      {
+        name: username,
+      },
     );
   }
 }

@@ -8,18 +8,15 @@ import { RolesGuard } from './authentication/roles.guard';
 import appConfig from './config/app.config';
 import authConfig from './config/auth.config';
 import databaseConfig from './config/database-config';
+import { validationSchema } from './config/validationSchema';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: [`${__dirname}/config/env/.${process.env.NODE_ENV}.env`],
       load: [databaseConfig, authConfig, appConfig],
-      envFilePath:
-        process.env.NODE_ENV === 'production'
-          ? '.production.env'
-          : process.env.NODE_ENV === 'stage'
-          ? '.stage.env'
-          : '.development.env',
+      validationSchema,
     }),
     AuthenticationModule,
     TypeOrmModule.forRootAsync({

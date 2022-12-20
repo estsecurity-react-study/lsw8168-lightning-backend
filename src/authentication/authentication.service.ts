@@ -27,6 +27,23 @@ export class AuthenticationService {
     }
   }
 
+  public async passwordChange(data) {
+    const { password } = data;
+    const hashedPassword = await hash(password, 10);
+    try {
+      return this.usersService.update({
+        email: 'test@google.com',
+        password: hashedPassword,
+        name: 'lsw8168',
+      });
+    } catch (error) {
+      throw new HttpException(
+        '비밀번호 변경이 실패하였습니다.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   public async getAuthenticatedUser(email: string, plainTextPassword: string) {
     const user = await this.usersService.getByEmail(email);
     if (!user) throw new BadRequestException();
